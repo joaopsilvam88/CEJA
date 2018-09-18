@@ -15,9 +15,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import br.com.ceja.classes.Administrador;
+import br.com.ceja.classes.Aluno;
+import br.com.ceja.classes.BD;
 import br.com.ceja.classes.Sistema;
 import br.com.ceja.exceptions.AdmJaExisteException;
 import br.com.ceja.exceptions.AdmNaoExisteException;
+import br.com.ceja.exceptions.AlunoJaExisteException;
+import br.com.ceja.exceptions.AlunoNaoExisteException;
 
 public class JanelaInicio extends JFrame implements MouseListener, ActionListener{
 
@@ -33,6 +37,17 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 	public JanelaInicio() throws AdmJaExisteException {
 		
 		sistema.addAdministrador(new Administrador("jao", "123"));
+		try {
+			Aluno a = new Aluno();
+			a.getDados().setNome("João Paulo Silva Martins");
+			sistema.addAluno(a);
+			Aluno b = new Aluno();
+			b.getDados().setNome("João jose silva");
+			b.getDados().setCpf("aa");
+			sistema.addAluno(b);
+		} catch (AlunoJaExisteException e) {
+			e.printStackTrace();
+		}
 		rotulo.setBounds(0, 0, 995, 570);
 		Image image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
 		rotulo.setIcon(new ImageIcon(image));
@@ -47,7 +62,7 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 		senha.setForeground(Color.GRAY);
 		senha.addMouseListener(this);
 		
-		botao.setBounds(381, 303, 34, 32);
+		botao.setBounds(380, 303, 34, 32);
 		botao.setOpaque(false);
 		botao.setContentAreaFilled(false);
 		botao.addActionListener(this);
@@ -62,7 +77,7 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 		setSize(1000, 600);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(new BD().gravaDados(sistema));
 		setVisible(true);
 	}
 

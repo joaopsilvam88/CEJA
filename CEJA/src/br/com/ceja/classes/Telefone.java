@@ -2,41 +2,40 @@ package br.com.ceja.classes;
 
 public class Telefone {
 
-	private int prefixo, ddd, numero;
-	private String operadora;
+	private String prefixo, ddd, numero, operadora;
 	
 	public Telefone() {
-		this(0, 0, 0, "");
+		this("", "", "", "");
 	}
 	
-	public Telefone(int prefixo, int ddd, int numero, String operadora) {
+	public Telefone(String prefixo, String ddd, String numero, String operadora) {
 		this.prefixo = prefixo;
 		this.ddd = ddd;
 		this.numero = numero;
 		this.operadora = operadora;
 	}
 	
-	public int getPrefixo() {
+	public String getPrefixo() {
 		return prefixo;
 	}
 	
-	public void setPrefixo(int prefixo) {
+	public void setPrefixo(String prefixo) {
 		this.prefixo = prefixo;
 	}
 	
-	public int getDdd() {
+	public String getDdd() {
 		return ddd;
 	}
 	
-	public void setDdd(int ddd) {
+	public void setDdd(String ddd) {
 		this.ddd = ddd;
 	}
 	
-	public int getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 	
-	public void setNumero(int numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 	

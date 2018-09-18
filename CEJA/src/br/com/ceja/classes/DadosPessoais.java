@@ -3,7 +3,7 @@ package br.com.ceja.classes;
 public class DadosPessoais {
 
 	private String nome, matricula, dataNascimento, sexo, 
-	naturalidade, cpf, email;
+	naturalidade, cpf, email, nomePai, nomeMae;
 	private Rg rg;
 	private boolean bolsaF, transporte;
 	private Endereco endereco;
@@ -11,13 +11,13 @@ public class DadosPessoais {
 	private Certidao certidao;
 	
 	public DadosPessoais() {
-		this("", "", "", "", "", "", "", new Rg(), false, 
+		this("", "", "", "", "", "", "", "", "", new Rg(), false, 
 				false, new Endereco(), new Telefone(), new Certidao());
 	}
 
 	public DadosPessoais(String nome, String matricula, String dataNascimento, String sexo, String naturalidade,
-			String cpf, String email, Rg rg, boolean bolsaF, boolean transporte, Endereco endereco, Telefone telefone,
-			Certidao certidao) {
+			String cpf, String email, String nomePai, String nomeMae, Rg rg, boolean bolsaF, boolean transporte, 
+			Endereco endereco, Telefone telefone, Certidao certidao) {
 		this.nome = nome;
 		this.matricula = matricula;
 		this.dataNascimento = dataNascimento;
@@ -25,6 +25,8 @@ public class DadosPessoais {
 		this.naturalidade = naturalidade;
 		this.cpf = cpf;
 		this.email = email;
+		this.nomePai = nomePai;
+		this.nomeMae = nomeMae;
 		this.rg = rg;
 		this.bolsaF = bolsaF;
 		this.transporte = transporte;
@@ -89,6 +91,22 @@ public class DadosPessoais {
 		this.email = email;
 	}
 
+	public String getNomePai() {
+		return nomePai;
+	}
+	
+	public void setNomePai(String nomePai) {
+		this.nomePai = nomePai;
+	}
+	
+	public String getNomeMae() {
+		return nomeMae;
+	}
+	
+	public void setNomeMae(String nomePai) {
+		this.nomeMae = nomeMae;
+	}
+	
 	public Rg getRg() {
 		return rg;
 	}

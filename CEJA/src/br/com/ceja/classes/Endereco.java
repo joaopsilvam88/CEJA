@@ -2,14 +2,13 @@ package br.com.ceja.classes;
 
 public class Endereco {
 
-	private String rua, bairro_distrito, cidade, cep, complemento;
-	private int num;
+	private String rua, bairro_distrito, cidade, cep, complemento, num;
 	
 	public Endereco() {
-		this("", "", "", "", "", 0);
+		this("", "", "", "", "", "");
 	}
 	
-	public Endereco(String rua, String bairro_distrito, String cidade, String cep, String complemento, int num) {
+	public Endereco(String rua, String bairro_distrito, String cidade, String cep, String complemento, String num) {
 		this.rua = rua;
 		this.bairro_distrito = bairro_distrito;
 		this.cidade = cidade;
@@ -58,11 +57,11 @@ public class Endereco {
 		this.complemento = complemento;
 	}
 	
-	public int getNum() {
+	public String getNum() {
 		return num;
 	}
 	
-	public void setNum(int num) {
+	public void setNum(String num) {
 		this.num = num;
 	}
 }

@@ -1,5 +1,6 @@
 package br.com.ceja.classes;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,25 +38,28 @@ public class Sistema {
 	
 	public void addAluno(Aluno aluno) throws AlunoJaExisteException{
 		for(Aluno a: alunos) {
-			if(a.getDados().getCpf().equals(aluno.getDados().getCpf()) || a.getDados().getEmail().equals(aluno.getDados().getEmail()) || 
-					a.getDados().getMatricula().equals(aluno.getDados().getMatricula()) || a.getDados().getRg().equals(aluno.getDados().getRg())) {
+			if(a.getDados().getCpf().equals(aluno.getDados().getCpf())){ //|| a.getDados().getEmail().equals(aluno.getDados().getEmail()) || 
+					//a.getDados().getMatricula().equals(aluno.getDados().getMatricula()) || a.getDados().getRg().equals(aluno.getDados().getRg())) {
 				throw new AlunoJaExisteException("Esse aluno já foi cadastrado no sistema.");
 			}
 		}
-		alunos.add(aluno);
+		alunos.add(aluno); 
+		System.out.println("aaaa");
 	}
 	
 	public void removeAluno(Aluno aluno) {
 		alunos.remove(aluno);
 	}
 	
-	public Aluno verificaAluno(String identificacao) throws AlunoNaoExisteException{
-		for(Aluno a: alunos) {
-			if(a.getDados().getNome().equals(identificacao) || a.getDados().getMatricula().equals(identificacao)) {
-				return a;
+	public List<Aluno> verificaAluno(String identificacao) throws AlunoNaoExisteException{
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		for(Aluno a: this.alunos) {
+			if(a.getDados().getNome().startsWith(identificacao) || a.getDados().getMatricula().startsWith(identificacao)) {
+				alunos.add(a);
 			}
 		}
-		throw new AlunoNaoExisteException("O aluno não foi encontrado no sistema.");
+		if(alunos.isEmpty()) throw new AlunoNaoExisteException("O aluno não foi encontrado no sistema.");
+		return alunos;
 	}
 	
 	public void addAdministrador(Administrador adm) throws AdmJaExisteException{
@@ -91,5 +95,11 @@ public class Sistema {
 	
 	public void exitSistem() {
 		System.exit(0);
+	}
+	
+	public static String removeAccents(String str) {
+	    str = Normalizer.normalize(str, Normalizer.Form.NFD);
+	    str = str.replaceAll("[^\\p{ASCII}]", "");
+	    return str;
 	}
 }
