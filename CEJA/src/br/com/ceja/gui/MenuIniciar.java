@@ -18,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import br.com.ceja.classes.Aluno;
 import br.com.ceja.classes.Rg;
@@ -27,6 +29,10 @@ import br.com.ceja.exceptions.AlunoNaoExisteException;
 
 public class MenuIniciar extends JFrame implements ActionListener, MouseListener{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Sistema sistema;
 	JLabel rotulo = new JLabel("");
 	ImageIcon imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_geral.jpg"));
@@ -39,6 +45,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 	JTextField buscar = new JTextField("Informe o nome ou a matrícula do aluno.");
 	JComboBox<String> alunos = new JComboBox<String>();
 	JComboBox<String> config = new JComboBox<String>();
+	JList<String> lista = new JList<String>();
 	List<JTextField> dados = new ArrayList<JTextField>();
 	List<JRadioButton> botoes = new ArrayList<JRadioButton>();
 	List<ButtonGroup> gruposBotoes = new ArrayList<ButtonGroup>();
@@ -72,7 +79,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		botao4.addActionListener(this);
 		botao4.setVisible(false);
 
-		botao5.setBounds(836, 490, 110, 32);
+		botao5.setBounds(908, 490, 43, 32);
 		botao5.setOpaque(false);
 		botao5.setContentAreaFilled(false);
 		botao5.addActionListener(this);
@@ -84,18 +91,56 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		buscar.setVisible(false);
 		buscar.addMouseListener(this);
 
-		alunos.setBounds(75, 210, 795, 25);
+		alunos.setBounds(80, 210, 795, 25);
 		alunos.setOpaque(false);
 		alunos.setBorder(null);
 		alunos.setVisible(false);
 		alunos.setBackground(new Color(220, 220, 220));
+		alunos.setUI(new BasicComboBoxUI() {
+			protected JButton createArrowButton() {
+				return new JButton() {
+					@Override
+					public Color getBackground() {		        		
+						return super.getBackground().getColor("", new Color(220, 220, 220));
+					}	
+					@Override
+					public Border getBorder() {
+						// TODO Auto-generated method stub
+						return javax.swing.BorderFactory.createLineBorder(new Color(220, 220, 220), 0);
+					}
+					public int getWidth() {
+						return 20;
+					}
+				};
+			}
+		});
 
-		config.setBounds(877, 55, 90, 20);
+		config.setBounds(877, 75, 90, 20);
 		config.setVisible(false);
-		config.setBackground(new Color(251, 106, 53));
+		config.setBackground(new Color(250, 177, 61));
+		//config.addItem("");
 		config.addItem("Logout");
 		config.addItem("Sair");
 		config.addItem("About!");
+		config.setUI(new BasicComboBoxUI() {
+			protected JButton createArrowButton() {
+				return new JButton() {
+					@Override
+					public Color getBackground() {		        		
+						return super.getBackground().getColor("", new Color(250, 177, 61));
+					}	
+					@Override
+					public Border getBorder() {
+						// TODO Auto-generated method stub
+						return javax.swing.BorderFactory.createLineBorder(new Color(0, 0, 0), 0);
+					}
+					public int getWidth() {
+						return 20;
+					}
+				};
+			}
+		});
+
 		addMouseListener(this);
 		gerarJanelaCadastro();
 
@@ -124,7 +169,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 
 	public void gerarJanelaCadastro() {
 
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 19; i++) {
 			dados.add(new JTextField(""));
 			rotulo.add(dados.get(i));
 			dados.get(i).setOpaque(false);
@@ -141,12 +186,16 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		dados.get(6).setBounds(70, 455, 150, 22);
 		dados.get(7).setBounds(61, 502, 349, 22);
 		dados.get(8).setBounds(360, 214, 192, 22);
-		dados.get(9).setBounds(595, 164, 193, 22);
-		dados.get(10).setBounds(637, 261, 291, 22);
-		dados.get(11).setBounds(632, 305, 220, 22);
-		dados.get(12).setBounds(872, 305, 57, 22);
-		dados.get(13).setBounds(454, 502, 151, 22);
-		dados.get(14).setBounds(627, 502, 152, 22);
+		dados.get(9).setBounds(360, 244, 192, 22);
+		dados.get(10).setBounds(360, 271, 192, 22);
+		dados.get(11).setBounds(360, 299, 192, 22);
+		dados.get(12).setBounds(595, 164, 193, 22);
+		dados.get(13).setBounds(637, 262, 291, 22);
+		dados.get(14).setBounds(632, 305, 220, 22);
+		dados.get(15).setBounds(872, 305, 57, 22);
+		dados.get(16).setBounds(710, 351, 220, 22);
+		dados.get(17).setBounds(454, 502, 151, 22);
+		dados.get(18).setBounds(627, 502, 152, 22);
 
 		for(int i = 0; i < 8; i++) {
 			botoes.add(new JRadioButton());
@@ -158,10 +207,10 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		botoes.get(1).setBounds(542, 164, 20, 20);
 		botoes.get(2).setBounds(355, 198, 17, 15);
 		botoes.get(3).setBounds(455, 198, 17, 15);
-		botoes.get(4).setBounds(655, 359, 17, 15);
-		botoes.get(5).setBounds(709, 359, 17, 15);
-		botoes.get(6).setBounds(815, 359, 17, 15);
-		botoes.get(7).setBounds(865, 359, 17, 15);
+		botoes.get(4).setBounds(673, 417, 17, 15);
+		botoes.get(5).setBounds(727, 417, 17, 15);
+		botoes.get(6).setBounds(833, 417, 17, 15);
+		botoes.get(7).setBounds(883, 417, 17, 15);
 
 		alteraBotoesCaixas(false);
 
@@ -185,7 +234,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		for(int i = 0; i < 8; i++) {
 			botoes.get(i).setVisible(b);
 		}
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 19; i++) {
 			dados.get(i).setVisible(b);
 		}
 	}
@@ -200,6 +249,17 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		botao4.setVisible(false);
 	}
 
+	public void verificaAluno() {
+		try {
+			for(Aluno a: sistema.verificaAluno(buscar.getText())) {
+				alunos.addItem(a.getDados().getNome().toUpperCase());
+				alunos.setVisible(true);
+			}
+		} catch (AlunoNaoExisteException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	public void buscaAluno() {
 		imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_buscar.jpg"));
 		image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
@@ -213,8 +273,19 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		for(int i = 0; i < 4; i++) {
+			if(alunos.getSelectedIndex() == i) {
+				try {
+					System.out.println(sistema.verificaAluno(alunos.getItemAt(i)));
+				} catch (AlunoNaoExisteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 		if(e.getSource() == botao1) {
 			buscaAluno();
+			getRootPane().setDefaultButton(botao4);
 		}
 
 		if(e.getSource() == botao2) {
@@ -223,17 +294,13 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 
 		if(e.getSource() == botao3) {
 			config.setVisible(true);
+			config.showPopup();
+
 		}
 
 		if(e.getSource() == botao4) {
-			try {
-				for(Aluno a: sistema.verificaAluno(buscar.getText())) {
-					alunos.addItem(a.getDados().getNome().toUpperCase());
-					alunos.setVisible(true);
-				}
-			} catch (AlunoNaoExisteException e1) {
-				e1.printStackTrace();
-			}
+			alunos.removeAllItems();
+			verificaAluno();
 		}
 
 		if(e.getSource() == botao5) {
@@ -249,12 +316,17 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 				aluno.getDados().setNomePai(dados.get(5).getText());
 				aluno.getDados().getTelefone().setNumero(dados.get(6).getText());
 				aluno.getDados().setEmail(dados.get(7).getText());
-				aluno.getDados().setNaturalidade(dados.get(8).getText());
-				aluno.getDados().getCertidao().setNumTermo(dados.get(9).getText());
-				aluno.getDados().getEndereco().setRua(dados.get(10).getText());
-				aluno.getDados().getEndereco().setBairro_distrito(dados.get(11).getText());
-				aluno.getDados().getEndereco().setNum(dados.get(12).getText());
-				aluno.getDados().setMatricula(dados.get(13).getText());
+				aluno.getDados().getCertidao().setNumTermo(dados.get(8).getText());
+				aluno.getDados().getCertidao().setFolha(dados.get(9).getText());
+				aluno.getDados().getCertidao().setLivro(dados.get(10).getText());
+				aluno.getDados().getCertidao().setDataEmissao(dados.get(11).getText());
+				aluno.getDados().setNaturalidade(dados.get(12).getText());
+				aluno.getDados().getEndereco().setRua(dados.get(13).getText());
+				aluno.getDados().getEndereco().setBairro_distrito(dados.get(14).getText());
+				aluno.getDados().getEndereco().setNum(dados.get(15).getText());
+				aluno.getDados().getEndereco().setCidade(dados.get(16).getText());
+				aluno.getDados().setMatricula(dados.get(17).getText());
+				aluno.getDados().setSige(dados.get(18).getText());
 
 				sistema.addAluno(aluno);
 				alteraBotoesCaixas(false);
@@ -271,7 +343,9 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 				e1.printStackTrace();
 			};
 
+
 		}
+
 	}
 
 	public void mouseClicked(MouseEvent e) {

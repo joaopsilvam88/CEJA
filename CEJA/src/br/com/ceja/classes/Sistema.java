@@ -51,10 +51,14 @@ public class Sistema {
 		alunos.remove(aluno);
 	}
 	
+	public static String removerAcentos(String str) {
+	    return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
+	
 	public List<Aluno> verificaAluno(String identificacao) throws AlunoNaoExisteException{
 		List<Aluno> alunos = new ArrayList<Aluno>();
 		for(Aluno a: this.alunos) {
-			if(a.getDados().getNome().startsWith(identificacao) || a.getDados().getMatricula().startsWith(identificacao)) {
+			if(removerAcentos(a.getDados().getNome()).toUpperCase().startsWith(removerAcentos(identificacao).toUpperCase()) || a.getDados().getMatricula().startsWith(identificacao)) {
 				alunos.add(a);
 			}
 		}

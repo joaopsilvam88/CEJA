@@ -2,7 +2,7 @@ package br.com.ceja.classes;
 
 public class DadosPessoais {
 
-	private String nome, matricula, dataNascimento, sexo, 
+	private String nome, matricula, sige, dataNascimento, sexo, 
 	naturalidade, cpf, email, nomePai, nomeMae;
 	private Rg rg;
 	private boolean bolsaF, transporte;
@@ -11,15 +11,16 @@ public class DadosPessoais {
 	private Certidao certidao;
 	
 	public DadosPessoais() {
-		this("", "", "", "", "", "", "", "", "", new Rg(), false, 
+		this("", "", "", "", "", "", "", "", "", "", new Rg(), false, 
 				false, new Endereco(), new Telefone(), new Certidao());
 	}
 
-	public DadosPessoais(String nome, String matricula, String dataNascimento, String sexo, String naturalidade,
+	public DadosPessoais(String nome, String matricula, String sige, String dataNascimento, String sexo, String naturalidade,
 			String cpf, String email, String nomePai, String nomeMae, Rg rg, boolean bolsaF, boolean transporte, 
 			Endereco endereco, Telefone telefone, Certidao certidao) {
 		this.nome = nome;
 		this.matricula = matricula;
+		this.sige = sige;
 		this.dataNascimento = dataNascimento;
 		this.sexo = sexo;
 		this.naturalidade = naturalidade;
@@ -49,6 +50,14 @@ public class DadosPessoais {
 	
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+	
+	public String getSige() {
+		return sige;
+	}
+	
+	public void setSige(String sige) {
+		this.sige = sige;
 	}
 	
 	public String getDataNascimento() {

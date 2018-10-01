@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -30,7 +32,7 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 	JLabel rotulo = new JLabel("");
 	ImageIcon imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/layout_login2.jpg"));
 	JTextField login = new JTextField("");
-	JPasswordField senha = new JPasswordField("Senha");
+	JPasswordField senha = new JPasswordField();
 	JButton botao = new JButton();
 	Sistema sistema = new Sistema();
 	
@@ -66,6 +68,7 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 		botao.setOpaque(false);
 		botao.setContentAreaFilled(false);
 		botao.addActionListener(this);
+		getRootPane().setDefaultButton(botao);
 		
 		rotulo.add(login);
 		rotulo.add(senha);
