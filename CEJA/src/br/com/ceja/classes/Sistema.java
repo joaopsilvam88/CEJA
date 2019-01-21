@@ -1,21 +1,28 @@
 package br.com.ceja.classes;
 
+import java.sql.SQLException;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
+import br.com.ceja.conexaoBD.AlunoDAO;
 import br.com.ceja.exceptions.*;
 
 public class Sistema {
 
+	private AlunoDAO dao;
 	private List<Aluno> alunos;
 	private List<Administrador> adms;
+	public JFrame janelaPrincipal;
 	
 	public Sistema() {
 		this(new ArrayList<Aluno>(), new ArrayList<Administrador>());
 	}
 	
 	public Sistema(List<Aluno> alunos, List<Administrador> adms) {
+		dao = new AlunoDAO();
 		this.alunos = alunos;
 		this.adms = adms;
 	}
@@ -36,34 +43,50 @@ public class Sistema {
 		this.adms = adms;
 	}
 	
+	public JFrame getJanelaPrincipal() {
+		return janelaPrincipal;
+	}
+
+	public void setJanelaPrincipal(JFrame janelaPrincipal) {
+		this.janelaPrincipal = janelaPrincipal;
+	}
+	
 	public void addAluno(Aluno aluno) throws AlunoJaExisteException{
-		for(Aluno a: alunos) {
-			if(a.getDados().getCpf().equals(aluno.getDados().getCpf())){ //|| a.getDados().getEmail().equals(aluno.getDados().getEmail()) || 
-					//a.getDados().getMatricula().equals(aluno.getDados().getMatricula()) || a.getDados().getRg().equals(aluno.getDados().getRg())) {
-				throw new AlunoJaExisteException("Esse aluno já foi cadastrado no sistema.");
-			}
+		
+		try {
+			dao.adicionaAluno(aluno);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		alunos.add(aluno); 
-		System.out.println("aaaa");
 	}
 	
-	public void removeAluno(Aluno aluno) {
-		alunos.remove(aluno);
+	public void removeAluno(String cpf) {
+		dao.remove(cpf);
 	}
 	
-	public static String removerAcentos(String str) {
-	    return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-	}
+//	public static String removerAcentos(String str) {
+//	    return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+//	}
 	
 	public List<Aluno> verificaAluno(String identificacao) throws AlunoNaoExisteException{
-		List<Aluno> alunos = new ArrayList<Aluno>();
-		for(Aluno a: this.alunos) {
-			if(removerAcentos(a.getDados().getNome()).toUpperCase().startsWith(removerAcentos(identificacao).toUpperCase()) || a.getDados().getMatricula().startsWith(identificacao)) {
-				alunos.add(a);
-			}
+//		for(Aluno a: this.alunos) {
+//			if(removerAcentos(a.getDados().getNome()).toUpperCase().startsWith(removerAcentos(identificacao).toUpperCase()) || a.getDados().getMatricula().startsWith(identificacao)) {
+//				alunos.add(a);
+//			}
+//		}
+//		if(alunos.isEmpty()) throw new AlunoNaoExisteException("O aluno não foi encontrado no sistema.");
+		
+		return dao.buscaAlunos(identificacao);
+	}
+	
+	public void alteraAluno(Aluno aluno, String cpf) {
+		try {
+			dao.altera(aluno, cpf);
+		} catch (AlunoNaoExisteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		if(alunos.isEmpty()) throw new AlunoNaoExisteException("O aluno não foi encontrado no sistema.");
-		return alunos;
 	}
 	
 	public void addAdministrador(Administrador adm) throws AdmJaExisteException{
@@ -99,6 +122,10 @@ public class Sistema {
 	
 	public void exitSistem() {
 		System.exit(0);
+	}
+	
+	public Aluno getAluno(String nome) {
+		return dao.buscaAlunos(nome).get(0);
 	}
 	
 	public static String removeAccents(String str) {

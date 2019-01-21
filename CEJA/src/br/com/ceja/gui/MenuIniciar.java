@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,10 +27,11 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import br.com.ceja.classes.Aluno;
 import br.com.ceja.classes.Rg;
 import br.com.ceja.classes.Sistema;
+import br.com.ceja.exceptions.AdmJaExisteException;
 import br.com.ceja.exceptions.AlunoJaExisteException;
 import br.com.ceja.exceptions.AlunoNaoExisteException;
 
-public class MenuIniciar extends JFrame implements ActionListener, MouseListener{
+public class MenuIniciar extends JFrame implements ActionListener, MouseListener, ItemListener{
 
 	/**
 	 * 
@@ -42,13 +46,20 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 	JButton botao3 = new JButton();
 	JButton botao4 = new JButton();
 	JButton botao5 = new JButton();
-	JTextField buscar = new JTextField("Informe o nome ou a matrícula do aluno.");
+	JButton botao6 = new JButton();
+	JButton botao7 = new JButton();
+	JButton botao8 = new JButton();
+	JTextField buscar = new JTextField("Informe o nome ou a matrícula do aluno");
 	JComboBox<String> alunos = new JComboBox<String>();
 	JComboBox<String> config = new JComboBox<String>();
 	JList<String> lista = new JList<String>();
 	List<JTextField> dados = new ArrayList<JTextField>();
 	List<JRadioButton> botoes = new ArrayList<JRadioButton>();
 	List<ButtonGroup> gruposBotoes = new ArrayList<ButtonGroup>();
+	DefaultListModel model = new DefaultListModel();
+	boolean cadastra = false;
+	boolean block = false;
+	Aluno aluno;
 
 	public MenuIniciar(Sistema sistema) {
 
@@ -79,11 +90,29 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		botao4.addActionListener(this);
 		botao4.setVisible(false);
 
-		botao5.setBounds(908, 490, 43, 32);
+		botao5.setBounds(870, 440, 89, 25);
 		botao5.setOpaque(false);
 		botao5.setContentAreaFilled(false);
 		botao5.addActionListener(this);
 		botao5.setVisible(false);
+
+		botao6.setBounds(871, 468, 89, 24);
+		botao6.setOpaque(false);
+		botao6.setContentAreaFilled(false);
+		botao6.addActionListener(this);
+		botao6.setVisible(false);
+
+		botao7.setBounds(918, 497, 42, 32);
+		botao7.setOpaque(false);
+		botao7.setContentAreaFilled(false);
+		botao7.addActionListener(this);
+		botao7.setVisible(false);
+
+		botao8.setBounds(870, 497, 42, 32);
+		botao8.setOpaque(false);
+		botao8.setContentAreaFilled(false);
+		botao8.addActionListener(this);
+		botao8.setVisible(false);
 
 		buscar.setBounds(80, 176, 795, 35);
 		buscar.setOpaque(false);
@@ -91,6 +120,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		buscar.setVisible(false);
 		buscar.addMouseListener(this);
 
+		alunos.addItemListener(this);
 		alunos.setBounds(80, 210, 795, 25);
 		alunos.setOpaque(false);
 		alunos.setBorder(null);
@@ -115,32 +145,28 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 			}
 		});
 
-		config.setBounds(877, 75, 90, 20);
-		config.setVisible(false);
-		config.setBackground(new Color(250, 177, 61));
-		//config.addItem("");
-		config.addItem("Logout");
-		config.addItem("Sair");
-		config.addItem("About!");
-		config.setUI(new BasicComboBoxUI() {
-			protected JButton createArrowButton() {
-				return new JButton() {
-					@Override
-					public Color getBackground() {		        		
-						return super.getBackground().getColor("", new Color(250, 177, 61));
-					}	
-					@Override
-					public Border getBorder() {
-						// TODO Auto-generated method stub
-						return javax.swing.BorderFactory.createLineBorder(new Color(0, 0, 0), 0);
-					}
-					public int getWidth() {
-						return 20;
-					}
-				};
+		
+		lista.setBounds(877, 75, 90, 56);
+		lista.setVisible(false);
+		lista.setBackground(new Color(250, 177, 61));
+		lista.setModel(model);
+		model.addElement("Logout");
+		model.addElement("Sair");
+		model.addElement("About!");
+
+		lista.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt){
+				if (lista.getSelectedIndex() == 0) {
+					setVisible(false);
+					sistema.getJanelaPrincipal().setVisible(true);
+				}				
+				if (lista.getSelectedIndex() == 1) {
+					System.exit(0);
+				}
 			}
 		});
-
+		
 		addMouseListener(this);
 		gerarJanelaCadastro();
 
@@ -149,9 +175,13 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		rotulo.add(botao3);
 		rotulo.add(botao4);
 		rotulo.add(botao5);
+		rotulo.add(botao6);
+		rotulo.add(botao7);
+		rotulo.add(botao8);
 		rotulo.add(buscar);
 		rotulo.add(alunos);
 		rotulo.add(config);
+		rotulo.add(lista);
 
 		add(rotulo);
 
@@ -231,6 +261,9 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 
 	public void alteraBotoesCaixas(boolean b) {
 		botao5.setVisible(b);
+		botao6.setVisible(b);
+		botao7.setVisible(b);
+		botao8.setVisible(b);
 		for(int i = 0; i < 8; i++) {
 			botoes.get(i).setVisible(b);
 		}
@@ -240,13 +273,22 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 	}
 
 	public void cadastraAluno() {
+		
+		for(JTextField t: dados) t.setText("");
+		for(ButtonGroup b: gruposBotoes) b.clearSelection();
+		alunos.setVisible(false);
+		cadastra = true;
 		imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/cadastro.jpg"));
 		image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
 		rotulo.setIcon(new ImageIcon(image));
 		botao3.setBounds(935, 45, 31, 30);
 		alteraBotoesCaixas(true);
+		acessoDados(true);
 		buscar.setVisible(false);
 		botao4.setVisible(false);
+		botao5.setVisible(false);
+		botao6.setVisible(false);
+		botao8.setVisible(false);
 	}
 
 	public void verificaAluno() {
@@ -259,19 +301,35 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public void buscaAluno() {
+		cadastra = false;
 		imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_buscar.jpg"));
 		image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
 		rotulo.setIcon(new ImageIcon(image));
 		botao3.setBounds(935, 45, 31, 30);
 		alteraBotoesCaixas(false);
+		botao5.setVisible(false);
+		botao6.setVisible(false);
 		botao4.setVisible(true);
 		buscar.setVisible(true);
 	}
 
+	public void acessoDados(boolean bool) {
+		block = false;
+		for(JTextField j: dados) {
+			j.setEditable(bool);
+		}
+
+		for(JRadioButton j: botoes) {
+			j.setEnabled(bool);
+		}
+	}
+
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
 
 		for(int i = 0; i < 4; i++) {
 			if(alunos.getSelectedIndex() == i) {
@@ -284,6 +342,8 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 			}
 		}
 		if(e.getSource() == botao1) {
+			buscar.setVisible(true);
+			botao4.setVisible(true);
 			buscaAluno();
 			getRootPane().setDefaultButton(botao4);
 		}
@@ -293,18 +353,81 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		}
 
 		if(e.getSource() == botao3) {
-			config.setVisible(true);
-			config.showPopup();
-
+			lista.setVisible(true);
 		}
 
 		if(e.getSource() == botao4) {
 			alunos.removeAllItems();
+			alunos.addItem("");
 			verificaAluno();
+
 		}
 
-		if(e.getSource() == botao5) {
-			try {
+		if(e.getSource() == botao7) {
+
+			
+			if(cadastra) {
+
+				try {
+					Aluno aluno = new Aluno();
+					aluno.getDados().setNome(dados.get(0).getText());
+					aluno.getDados().setCpf(dados.get(1).getText());
+					Rg rg = new Rg();
+					rg.setNumero(dados.get(2).getText());
+					aluno.getDados().setRg(rg);
+					aluno.getDados().setDataNascimento(dados.get(3).getText());
+					aluno.getDados().setNomeMae(dados.get(4).getText());
+					aluno.getDados().setNomePai(dados.get(5).getText());
+					aluno.getDados().getTelefone().setNumero(dados.get(6).getText());
+					aluno.getDados().setEmail(dados.get(7).getText());
+					aluno.getDados().getCertidao().setNumTermo(dados.get(8).getText());
+					aluno.getDados().getCertidao().setFolha(dados.get(9).getText());
+					aluno.getDados().getCertidao().setLivro(dados.get(10).getText());
+					aluno.getDados().getCertidao().setDataEmissao(dados.get(11).getText());
+					aluno.getDados().setNaturalidade(dados.get(12).getText());
+					aluno.getDados().getEndereco().setRua(dados.get(13).getText());
+					aluno.getDados().getEndereco().setBairro_distrito(dados.get(14).getText());
+					aluno.getDados().getEndereco().setNum(dados.get(15).getText());
+					aluno.getDados().getEndereco().setCidade(dados.get(16).getText());
+					aluno.getDados().setMatricula(dados.get(17).getText());
+					aluno.getDados().setSige(dados.get(18).getText());
+
+					if(botoes.get(0).isSelected()) aluno.getDados().setSexo("M");
+					else if(botoes.get(1).isSelected()) aluno.getDados().setSexo("F");
+
+					if(botoes.get(2).isSelected()) aluno.getDados().getCertidao().setTipo("N");
+					else if(botoes.get(3).isSelected()) aluno.getDados().getCertidao().setTipo("C");
+
+					if(botoes.get(4).isSelected()) aluno.getDados().setTransporte(true);
+					else if(botoes.get(5).isSelected()) aluno.getDados().setTransporte(false);
+
+					if(botoes.get(6).isSelected()) aluno.getDados().setBolsaF(true);
+					else if(botoes.get(7).isSelected()) aluno.getDados().setBolsaF(false);
+	
+					
+					sistema.addAluno(aluno);
+					alteraBotoesCaixas(false);
+					imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_geral.jpg"));
+					image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
+					rotulo.setIcon(new ImageIcon(image));
+					for(JTextField t: dados) t.setText("");
+					/**
+					 * 
+					 * 
+					 * Colocar janela de aluno cadastrado.
+					 */
+				} catch (AlunoJaExisteException e1) {
+					e1.printStackTrace();
+				}
+			}else if(!block){
+				botao5.setVisible(false);
+				botao6.setVisible(false);
+				acessoDados(true);
+				block = true;
+				imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/alterar_dados.jpg"));
+				image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
+				rotulo.setIcon(new ImageIcon(image));
+			}else if(block) {
 				Aluno aluno = new Aluno();
 				aluno.getDados().setNome(dados.get(0).getText());
 				aluno.getDados().setCpf(dados.get(1).getText());
@@ -328,28 +451,43 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 				aluno.getDados().setMatricula(dados.get(17).getText());
 				aluno.getDados().setSige(dados.get(18).getText());
 
-				sistema.addAluno(aluno);
-				alteraBotoesCaixas(false);
-				imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_geral.jpg"));
+				if(botoes.get(0).isSelected()) aluno.getDados().setSexo("M");
+				else if(botoes.get(1).isSelected()) aluno.getDados().setSexo("F");
+
+				if(botoes.get(2).isSelected()) aluno.getDados().getCertidao().setTipo("N");
+				else if(botoes.get(3).isSelected()) aluno.getDados().getCertidao().setTipo("C");
+
+				if(botoes.get(4).isSelected()) aluno.getDados().setTransporte(true);
+				else if(botoes.get(5).isSelected()) aluno.getDados().setTransporte(false);
+
+				if(botoes.get(6).isSelected()) aluno.getDados().setBolsaF(true);
+				else if(botoes.get(7).isSelected()) aluno.getDados().setBolsaF(false);
+
+				sistema.alteraAluno(aluno, this.aluno.getDados().getCpf());
+				
+				botao5.setVisible(true);
+				botao6.setVisible(true);
+				acessoDados(false);
+				imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/dados.jpg"));
 				image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
 				rotulo.setIcon(new ImageIcon(image));
-				for(JTextField t: dados) t.setText("");
-				/**
-				 * 
-				 * 
-				 * Colocar janela de aluno cadastrado.
-				 */
-			} catch (AlunoJaExisteException e1) {
-				e1.printStackTrace();
-			};
-
-
+			}
 		}
+		
+		if(e.getSource() == botao8) {
+			alteraBotoesCaixas(false);
+			System.out.println(dados.get(1).getText());
+			sistema.removeAluno(dados.get(1).getText());
+			imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_geral.jpg"));
+			image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
+			rotulo.setIcon(new ImageIcon(image));
+		}
+
 
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		config.setVisible(false);
+		lista.setVisible(false);
 		alunos.setVisible(false);
 	}
 	public void mouseEntered(MouseEvent e) {
@@ -362,5 +500,57 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		}
 	}
 	public void mouseReleased(MouseEvent e) {		
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+
+		for(int i = 1; i < alunos.getItemCount(); i++) {
+			if(alunos.getSelectedIndex() == i) {
+				aluno = sistema.getAluno(alunos.getItemAt(i));
+				dados.get(0).setText(aluno.getDados().getNome());
+				dados.get(1).setText(aluno.getDados().getCpf());
+				dados.get(2).setText(aluno.getDados().getRg().getNumero());
+				dados.get(3).setText(aluno.getDados().getDataNascimento());
+				dados.get(4).setText(aluno.getDados().getNomeMae());
+				dados.get(5).setText(aluno.getDados().getNomePai());
+				dados.get(6).setText(aluno.getDados().getTelefone().getNumero());
+				dados.get(7).setText(aluno.getDados().getEmail());
+				dados.get(8).setText(aluno.getDados().getCertidao().getNumTermo());
+				dados.get(9).setText(aluno.getDados().getCertidao().getFolha());
+				dados.get(10).setText(aluno.getDados().getCertidao().getLivro());
+				dados.get(11).setText(aluno.getDados().getCertidao().getDataEmissao());
+				dados.get(12).setText(aluno.getDados().getNaturalidade());
+				dados.get(13).setText(aluno.getDados().getEndereco().getRua());
+				dados.get(14).setText(aluno.getDados().getEndereco().getBairro_distrito());
+				dados.get(15).setText(aluno.getDados().getEndereco().getNum());
+				dados.get(16).setText(aluno.getDados().getEndereco().getCidade());
+				dados.get(17).setText(aluno.getDados().getMatricula());
+				dados.get(18).setText(aluno.getDados().getSige());
+
+
+				if(aluno.getDados().getSexo().equals("M")) botoes.get(0).setSelected(true);
+				else if(aluno.getDados().getSexo().equals("F")) botoes.get(1).setSelected(true);
+				
+				if(aluno.getDados().getCertidao().getTipo().equals("N")) botoes.get(2).setSelected(true);
+				else if(aluno.getDados().getCertidao().getTipo().equals("C")) botoes.get(3).setSelected(true);
+
+				if(aluno.getDados().isTransporte()) botoes.get(4).setSelected(true);
+				else if(!aluno.getDados().isTransporte()) botoes.get(5).setSelected(true);
+
+				if(aluno.getDados().isBolsaF()) botoes.get(6).setSelected(true);
+				else if(!aluno.getDados().isBolsaF()) botoes.get(7).setSelected(true);
+				
+				botao4.setVisible(false);
+				buscar.setVisible(false);
+				alunos.setVisible(false);
+				acessoDados(false);
+				alteraBotoesCaixas(true);
+				imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/dados.jpg"));
+				image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
+				rotulo.setIcon(new ImageIcon(image));
+			}
+
+		}
 	}
 }

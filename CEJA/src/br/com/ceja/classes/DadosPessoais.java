@@ -112,7 +112,7 @@ public class DadosPessoais {
 		return nomeMae;
 	}
 	
-	public void setNomeMae(String nomePai) {
+	public void setNomeMae(String nomeMae) {
 		this.nomeMae = nomeMae;
 	}
 	
