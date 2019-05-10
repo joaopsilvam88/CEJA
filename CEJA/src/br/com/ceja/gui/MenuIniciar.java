@@ -27,7 +27,6 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import br.com.ceja.classes.Aluno;
 import br.com.ceja.classes.Rg;
 import br.com.ceja.classes.Sistema;
-import br.com.ceja.exceptions.AdmJaExisteException;
 import br.com.ceja.exceptions.AlunoJaExisteException;
 import br.com.ceja.exceptions.AlunoNaoExisteException;
 
@@ -56,11 +55,13 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 	List<JTextField> dados = new ArrayList<JTextField>();
 	List<JRadioButton> botoes = new ArrayList<JRadioButton>();
 	List<ButtonGroup> gruposBotoes = new ArrayList<ButtonGroup>();
+	@SuppressWarnings("rawtypes")
 	DefaultListModel model = new DefaultListModel();
 	boolean cadastra = false;
 	boolean block = false;
 	Aluno aluno;
 
+	@SuppressWarnings("unchecked")
 	public MenuIniciar(Sistema sistema) {
 
 		this.sistema = sistema;
@@ -129,6 +130,11 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		alunos.setUI(new BasicComboBoxUI() {
 			protected JButton createArrowButton() {
 				return new JButton() {
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+					@SuppressWarnings("static-access")
 					@Override
 					public Color getBackground() {		        		
 						return super.getBackground().getColor("", new Color(220, 220, 220));
@@ -197,6 +203,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 		new MenuIniciar(new Sistema());
 	}
 
+	@SuppressWarnings("static-access")
 	public void gerarJanelaCadastro() {
 
 		for(int i = 0; i < 19; i++) {
@@ -297,7 +304,10 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 				alunos.addItem(a.getDados().getNome().toUpperCase());
 				alunos.setVisible(true);
 			}
+			if(alunos.getItemCount()==1)new Avisos().alunoNaoEncontrado();
+
 		} catch (AlunoNaoExisteException e1) {
+			new Avisos().alunoNaoEncontrado();
 			e1.printStackTrace();
 		}
 	}
@@ -362,6 +372,14 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 			verificaAluno();
 
 		}
+		
+		if(e.getSource() == botao5) {
+			new Boletim();
+		}
+		
+		if(e.getSource() == botao6) {
+			new Historico();
+		}
 
 		if(e.getSource() == botao7) {
 
@@ -416,6 +434,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 					 * 
 					 * Colocar janela de aluno cadastrado.
 					 */
+					new Avisos().alunoCadastrado();
 				} catch (AlunoJaExisteException e1) {
 					e1.printStackTrace();
 				}
@@ -478,6 +497,7 @@ public class MenuIniciar extends JFrame implements ActionListener, MouseListener
 			alteraBotoesCaixas(false);
 			System.out.println(dados.get(1).getText());
 			sistema.removeAluno(dados.get(1).getText());
+			new Avisos().alunoRemovido();
 			imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/menu_geral.jpg"));
 			image = imagem.getImage().getScaledInstance(rotulo.getWidth(), rotulo.getHeight(), Image.SCALE_SMOOTH);
 			rotulo.setIcon(new ImageIcon(image));

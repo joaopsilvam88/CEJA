@@ -84,7 +84,7 @@ public class ConexaoMySQL {
 	}
 	
 	public static void main(String[] args) {
-		Connection c = new ConexaoMySQL().getConexaoMySQL();
+		//Connection c = new ConexaoMySQL().getConexaoMySQL();
 		System.out.println(status);
 	}
 }

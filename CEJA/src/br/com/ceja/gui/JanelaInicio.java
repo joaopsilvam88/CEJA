@@ -26,8 +26,8 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 	
 	JLabel rotulo = new JLabel("");
 	ImageIcon imagem = new ImageIcon(getClass().getResource("/br/com/ceja/images/layout_login2.jpg"));
-	JTextField login = new JTextField("jao");
-	JPasswordField senha = new JPasswordField("123");
+	JTextField login = new JTextField("joao");
+	JPasswordField senha = new JPasswordField("12345678");
 	JButton botao = new JButton();
 	Sistema sistema = new Sistema();
 	
@@ -94,16 +94,14 @@ public class JanelaInicio extends JFrame implements MouseListener, ActionListene
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == botao) {
 			try {
+
 				if(sistema.logarAdministrador(login.getText(), senha.getText())) {
 					setVisible(false);
 					new MenuIniciar(sistema);
 				}
 			} catch (AdmNaoExisteException e1) {
-				/** 
-				 * 
-				 * Colocar aqui o lançamento com janela.
-				 * 
-				 */
+				new Avisos().admNaoEncontrado();
+				e1.printStackTrace();
 			}
 		}
 	}

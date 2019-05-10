@@ -5,16 +5,14 @@ import java.util.List;
 
 public class Historico {
 
-	private List<Disciplina> disciplinas;
-	private List<Integer> notas;
-	
-	public Historico() {
-		this(new ArrayList<Disciplina>(), new ArrayList<Integer>());
-	}
-	
-	public Historico(List<Disciplina> disciplinas, List<Integer> notas) {
+	List<Disciplina> disciplinas;
+
+	public Historico(List<Disciplina> disciplinas) {
 		this.disciplinas = disciplinas;
-		this.notas = notas;
+	}
+
+	public Historico() {
+		this(new ArrayList<Disciplina>());
 	}
 
 	public List<Disciplina> getDisciplinas() {
@@ -23,21 +21,6 @@ public class Historico {
 
 	public void setDisciplinas(List<Disciplina> disciplinas) {
 		this.disciplinas = disciplinas;
-	}
-
-	public List<Integer> getNotas() {
-		return notas;
-	}
-
-	public void setNotas(List<Integer> notas) {
-		this.notas = notas;
-	}
-
-	public void geraNotas() {
-		
-		for(Disciplina d: disciplinas) {
-			notas.add(d.mediaFinal);
-		}
 	}
 	
 }

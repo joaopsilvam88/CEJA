@@ -7,12 +7,14 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import br.com.ceja.conexaoBD.AdmDAO;
 import br.com.ceja.conexaoBD.AlunoDAO;
 import br.com.ceja.exceptions.*;
 
 public class Sistema {
 
 	private AlunoDAO dao;
+	private AdmDAO admDao;
 	private List<Aluno> alunos;
 	private List<Administrador> adms;
 	public JFrame janelaPrincipal;
@@ -23,6 +25,7 @@ public class Sistema {
 	
 	public Sistema(List<Aluno> alunos, List<Administrador> adms) {
 		dao = new AlunoDAO();
+		admDao = new AdmDAO();
 		this.alunos = alunos;
 		this.adms = adms;
 	}
@@ -101,21 +104,10 @@ public class Sistema {
 	public void removeAdministrador(Administrador adm) {
 		adms.remove(adm);
 	}
-	
-	public Administrador verificaAdministrador(String login) throws AdmNaoExisteException{
-		for(Administrador a: adms) {
-			if(a.getLogin().equals(login)) {
-				return a;
-			}
-		}
-		throw new AdmNaoExisteException("O usuário não foi encontrado no sistema.");	
-	}
-	
+		
 	public boolean logarAdministrador(String login, String senha) throws AdmNaoExisteException{
-		for(Administrador a: adms) {
-			if(a.getLogin().equals(login) && a.getSenha().equals(senha)) {
-				return true;
-			}
+		if(admDao.verificaAdm(login, senha)) {
+			return true;		
 		}
 		throw new AdmNaoExisteException("O usuário não foi encontrado no sistema.");	
 	}
@@ -133,4 +125,5 @@ public class Sistema {
 	    str = str.replaceAll("[^\\p{ASCII}]", "");
 	    return str;
 	}
+	
 }
